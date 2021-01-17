@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.AddContentViewController">
+   <children>
+      <Label alignment="CENTER" layoutX="14.0" layoutY="-2.0" prefHeight="129.0" prefWidth="586.0" text="Insert data for new entry ">
+         <font>
+            <Font size="51.0" />
+         </font>
+      </Label>
+      <Label layoutX="184.0" layoutY="126.0" text="Username" />
+      <Label layoutX="191.0" layoutY="170.0" text="Password" />
+      <Label layoutX="197.0" layoutY="217.0" text="Website" />
+      <TextField fx:id="usernameTextField" layoutX="307.0" layoutY="124.0" />
+      <TextField fx:id="passwordTextField" layoutX="307.0" layoutY="168.0" />
+      <TextField fx:id="websiteTextField" layoutX="307.0" layoutY="214.0" />
+      <Button fx:id="enterButton" alignment="CENTER" layoutX="281.0" layoutY="283.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="54.0" text="Enter" />
+      <Button fx:id="buttonCancel" alignment="CENTER" layoutX="281.0" layoutY="327.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="54.0" text="Cancel" />
+   </children>
+</AnchorPane>
