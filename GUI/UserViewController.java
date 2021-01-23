@@ -14,7 +14,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -26,8 +25,6 @@ import java.util.logging.Logger;
 
 public class UserViewController implements Initializable {
 
-//    @FXML
-//    private Label label;
     @FXML
     private TableView<User> tableUser;
     @FXML
@@ -39,13 +36,16 @@ public class UserViewController implements Initializable {
     @FXML
     private TableColumn<User, String> colURL;
     @FXML
-    private TableColumn<User, String> colEdit;
+    public TableColumn<User, String> colEdit;
     @FXML
     private Button buttonAdd;
 
     private Connection connection;
     private ObservableList<User> list;
     private DataBaseManager dataBaseManager;
+
+
+    String username;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -57,8 +57,7 @@ public class UserViewController implements Initializable {
 
     }
 
-
-    private void populateButWithJoin() {
+    public void populateButWithJoin() {
 
         try {
             list = FXCollections.observableArrayList();
@@ -68,19 +67,25 @@ public class UserViewController implements Initializable {
             String username = LoginViewController.username;
             String password = LoginViewController.password;
 
+
+
             String query = "SELECT logindata.id, users.main_username, users.main_password, users.url "+
                     "FROM gPOZ3L2sft.users " +
                     "LEFT JOIN gPOZ3L2sft.logindata " +
                     "ON gPOZ3L2sft.users.userID = gPOZ3L2sft.logindata.id " +
                     "WHERE gPOZ3L2sft.logindata.main_username = '" + username +"' " +
                     "AND gPOZ3L2sft.logindata.main_password = '" + password + "'; ";
-//local
-//            String query = "SELECT logindata.id, users1.username, users1.password, users1.url "+
-//                    "FROM testdatebase.users1 " +
-//                    "LEFT JOIN testdatebase.logindata " +
-//                    "ON testdatebase.users1.userID = testdatebase.logindata.id " +
-//                    "WHERE testdatebase.logindata.main_username = '" + username +"' " +
-//                    "AND testdatebase.logindata.main_password = '" + password + "'; ";
+
+            //local
+            /*
+
+            String query = "SELECT logindata.id, users1.username, users1.password, users1.url "+
+                    "FROM testdatebase.users1 " +
+                    "LEFT JOIN testdatebase.logindata " +
+                    "ON testdatebase.users1.userID = testdatebase.logindata.id " +
+                    "WHERE testdatebase.logindata.main_username = '" + username +"' " +
+                    "AND testdatebase.logindata.main_password = '" + password + "'; "; local
+*/
 
 
             System.out.println(query);
@@ -101,6 +106,7 @@ public class UserViewController implements Initializable {
             colPassword.setCellValueFactory(new PropertyValueFactory<>("password"));
             colURL.setCellValueFactory(new PropertyValueFactory<>("url"));
 
+
             Callback<TableColumn<User, String>, TableCell<User, String>> cellFactory =(param) -> new TableCell<User, String>(){
                 @Override
                 public void updateItem(String item, boolean empty){
@@ -112,43 +118,50 @@ public class UserViewController implements Initializable {
                     }else{
                         final Button editButton = new Button("Edit");
                         editButton.setOnAction(event -> {
-                            try {
-                                Parent root = FXMLLoader.load(getClass().getResource("EditView.fxml"));
-                                Stage stage = new Stage();
+
+                            User u;
+                            Node node = (Node) event.getSource();
+                            Stage stage = (Stage) node.getScene().getWindow();
+                            stage.close();
+
+                            try{
+                                Parent root = FXMLLoader.load(getClass().getResource("/GUI/EditView.fxml"));
+                                u = getTableView().getItems().get(getIndex());
+                                stage.setUserData(u);
                                 Scene scene = new Scene(root);
                                 stage.setScene(scene);
-                                stage.setTitle("Database Manager");
                                 stage.show();
+
+
+//                                Parent root = FXMLLoader.load(getClass().getResource("/GUI/EditView.fxml"));
+//                                Stage stage = new Stage();
+//                                Scene scene = new Scene(root);
+//                                stage.setScene(scene);
+//                                stage.setTitle("Database Manager");
+//                                stage.show();
+                                //User u = getTableView().getItems().get(getIndex());
+
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
-                            User u = getTableView().getItems().get(getIndex());
-
-
-
-                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                            alert.setContentText("You want to edit \n " + u.getUsername());
-                            alert.show();
                         });
-
                         setGraphic(editButton);
                         setText(null);
                     }
+
                 }
             };
             colEdit.setCellFactory(cellFactory);
             tableUser.setItems(list);
+
         }
         catch (SQLException e){
             Logger.getLogger(UserViewController.class.getName()).log(Level.SEVERE, null, e);
         }
     }
 
-
-    public void getUserData(){
-    }
-
-    private void populateTableView() {
+    @Deprecated
+     private void populateTableView() {
 
         try {
             list = FXCollections.observableArrayList();
@@ -233,5 +246,9 @@ public class UserViewController implements Initializable {
             }
         });
 
+    }
+
+    public void setUsername(String username){
+        this.username = username;
     }
 }
