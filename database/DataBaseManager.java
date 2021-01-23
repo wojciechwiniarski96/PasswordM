@@ -17,9 +17,9 @@ public class DataBaseManager extends UserAction {
 
     private static final Logger logger = Logger.getLogger(DataBaseManager.class.getName());
     private final static String DRIVER = "com.mysql.cj.jdbc.Driver";
-    private final static String URL = "jdbc:mysql://remotemysql.com:3306/***********?allowMultiQueries=TRUE&serverTimezone=UTC";
-    private final static String DB_USER = "*********";
-    private final static String DB_PASSWORD= "***********";
+    private final static String URL = "jdbc:mysql://remotemysql.com:3306/gPOZ3L2sft?allowMultiQueries=TRUE&serverTimezone=UTC";
+    private final static String DB_USER = "gPOZ3L2sft";
+    private final static String DB_PASSWORD= "**************";
 
 
 
