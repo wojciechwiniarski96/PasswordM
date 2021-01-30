@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class TokenGenerator{
 
-    String generateToken(){
+    public static int generateToken(){
         Random random = new Random();
         int[] token = new int[6];
         String tokenToString = "";
@@ -13,6 +13,6 @@ public class TokenGenerator{
                token[i] = partOfToken;
                tokenToString = tokenToString + token[i];
         }
-        return tokenToString;
+        return Integer.parseInt(tokenToString);
     }
 }
