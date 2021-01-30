@@ -36,7 +36,9 @@ public class UserViewController implements Initializable {
     @FXML
     private TableColumn<User, String> colURL;
     @FXML
-    public TableColumn<User, String> colEdit;
+    private TableColumn<User, String> colEdit;
+    @FXML
+    private TableColumn<User, String> colDelete;
     @FXML
     private Button buttonAdd;
 
@@ -57,7 +59,7 @@ public class UserViewController implements Initializable {
 
     }
 
-    public void populateButWithJoin() {
+    private void populateButWithJoin() {
 
         try {
             list = FXCollections.observableArrayList();
@@ -87,7 +89,6 @@ public class UserViewController implements Initializable {
                     "AND testdatebase.logindata.main_password = '" + password + "'; "; local
 */
 
-
             System.out.println(query);
             rs = connection.createStatement().executeQuery(query);
 
@@ -98,7 +99,6 @@ public class UserViewController implements Initializable {
                 user.setUsername(rs.getString("main_username"));
                 user.setUrl(rs.getString("url"));
                 list.add(user);
-
             }
 
             colID.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -106,16 +106,15 @@ public class UserViewController implements Initializable {
             colPassword.setCellValueFactory(new PropertyValueFactory<>("password"));
             colURL.setCellValueFactory(new PropertyValueFactory<>("url"));
 
-
-            Callback<TableColumn<User, String>, TableCell<User, String>> cellFactory =(param) -> new TableCell<User, String>(){
+            Callback<TableColumn<User, String>, TableCell<User, String>> cellFactoryEdit =(param) -> new TableCell<User, String>() {
                 @Override
-                public void updateItem(String item, boolean empty){
+                public void updateItem(String item, boolean empty) {
                     super.updateItem(item, empty);
 
-                    if(empty){
+                    if (empty) {
                         setGraphic(null);
                         setText(null);
-                    }else{
+                    } else {
                         final Button editButton = new Button("Edit");
                         editButton.setOnAction(event -> {
 
@@ -124,22 +123,13 @@ public class UserViewController implements Initializable {
                             Stage stage = (Stage) node.getScene().getWindow();
                             stage.close();
 
-                            try{
+                            try {
                                 Parent root = FXMLLoader.load(getClass().getResource("/GUI/EditView.fxml"));
                                 u = getTableView().getItems().get(getIndex());
                                 stage.setUserData(u);
                                 Scene scene = new Scene(root);
                                 stage.setScene(scene);
                                 stage.show();
-
-
-//                                Parent root = FXMLLoader.load(getClass().getResource("/GUI/EditView.fxml"));
-//                                Stage stage = new Stage();
-//                                Scene scene = new Scene(root);
-//                                stage.setScene(scene);
-//                                stage.setTitle("Database Manager");
-//                                stage.show();
-                                //User u = getTableView().getItems().get(getIndex());
 
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -148,12 +138,45 @@ public class UserViewController implements Initializable {
                         setGraphic(editButton);
                         setText(null);
                     }
-
                 }
             };
-            colEdit.setCellFactory(cellFactory);
-            tableUser.setItems(list);
+            colEdit.setCellFactory(cellFactoryEdit);
 
+            Callback<TableColumn<User, String>, TableCell<User, String>> cellFactoryDelete = (param) -> new TableCell<User, String>(){
+                @Override
+                public void updateItem(String item, boolean empty){
+                super.updateItem(item, empty);
+
+                if(empty){
+                    setGraphic(null);
+                    setText(null);
+                }else{
+                    final Button deleteButton = new Button("Delete");
+                    deleteButton.setOnAction(event -> {
+                        User u;
+                        Node node = (Node) event.getSource();
+                        Stage stage = (Stage)node.getScene().getWindow();
+                        stage.close();
+
+                        try{
+                            Parent root = FXMLLoader.load(getClass().getResource("/GUI/DeleteView.fxml"));
+                            u = getTableView().getItems().get(getIndex());
+                            stage.setUserData(u);
+                            Scene scene = new Scene(root);
+                            stage.setScene(scene);
+                            stage.show();
+
+                        }catch (IOException e){
+                            e.printStackTrace();
+                        }
+                    });
+                    setGraphic(deleteButton);
+                    setText(null);
+                }
+                }
+            };
+            colDelete.setCellFactory(cellFactoryDelete);
+            tableUser.setItems(list);
         }
         catch (SQLException e){
             Logger.getLogger(UserViewController.class.getName()).log(Level.SEVERE, null, e);
@@ -190,31 +213,28 @@ public class UserViewController implements Initializable {
             colPassword.setCellValueFactory(new PropertyValueFactory<>("password"));
 
 
-            Callback<TableColumn<User, String>, TableCell<User, String>> cellFactory =(param) -> {
-                final TableCell<User, String> cell = new TableCell<User, String>(){
-                    @Override
-                    public void updateItem(String item, boolean empty){
-                        super.updateItem(item, empty);
+            Callback<TableColumn<User, String>, TableCell<User, String>> cellFactory =(param) -> new TableCell<User, String>(){
+                @Override
+                public void updateItem(String item, boolean empty){
+                    super.updateItem(item, empty);
 
-                        if(empty){
-                            setGraphic(null);
-                            setText(null);
-                        }else{
-                            final Button editButton = new Button("Edit");
-                            editButton.setOnAction(event -> {
-                                User u = getTableView().getItems().get(getIndex());
+                    if(empty){
+                        setGraphic(null);
+                        setText(null);
+                    }else{
+                        final Button editButton = new Button("Edit");
+                        editButton.setOnAction(event -> {
+                            User u = getTableView().getItems().get(getIndex());
 
-                                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                                alert.setContentText("You want to edit \n " + u.getUsername());
-                                alert.show();
-                            });
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setContentText("You want to edit \n " + u.getUsername());
+                            alert.show();
+                        });
 
-                            setGraphic(editButton);
-                            setText(null);
-                        }
+                        setGraphic(editButton);
+                        setText(null);
                     }
-                };
-                return cell;
+                }
             };
 
             colEdit.setCellFactory(cellFactory);
@@ -234,9 +254,12 @@ public class UserViewController implements Initializable {
     private void addNewContent(){
 
         buttonAdd.setOnAction(event -> {
+            Node node = (Node) event.getSource();
+            Stage stage = (Stage)node.getScene().getWindow();
+            stage.close();
+
             try{
                 Parent root = FXMLLoader.load(getClass().getResource("AddContentView.fxml"));
-                Stage stage = new Stage();
                 Scene scene = new Scene(root);
                 stage.setScene(scene);
                 stage.setTitle("Database Manager");
@@ -245,10 +268,6 @@ public class UserViewController implements Initializable {
                 e.printStackTrace();
             }
         });
-
     }
 
-    public void setUsername(String username){
-        this.username = username;
-    }
 }

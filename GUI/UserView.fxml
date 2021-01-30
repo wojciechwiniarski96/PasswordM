@@ -20,10 +20,11 @@
       <TableView fx:id="tableUser" layoutX="45.0" layoutY="127.0" prefHeight="210.0" prefWidth="651.0">
         <columns>
           <TableColumn fx:id="colID" prefWidth="41.60003662109375" text="ID" />
-          <TableColumn fx:id="colUsername" prefWidth="142.40003204345703" text="Username" />
-            <TableColumn fx:id="colPassword" prefWidth="186.4000244140625" text="Password" />
-            <TableColumn fx:id="colURL" prefWidth="139.19998168945312" text="URL " />
-            <TableColumn fx:id="colEdit" prefWidth="107.20001220703125" text="Edit" />
+          <TableColumn fx:id="colUsername" prefWidth="115.99999237060547" text="Username" />
+            <TableColumn fx:id="colPassword" prefWidth="139.20001220703125" text="Password" />
+            <TableColumn fx:id="colURL" prefWidth="182.40005493164062" text="URL " />
+            <TableColumn fx:id="colEdit" prefWidth="88.79998779296875" text="Edit" />
+            <TableColumn fx:id="colDelete" prefWidth="79.9999877929688" text="Delete" />
         </columns>
       </TableView>
       <MenuBar layoutX="-1.0" layoutY="1.0" prefHeight="26.0" prefWidth="731.0">
