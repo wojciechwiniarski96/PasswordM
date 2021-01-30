@@ -1,5 +1,6 @@
 package GUI;
 
+import TwoFactorAuth.Authorizer;
 import User.User;
 import database.DataBaseManager;
 import javafx.event.ActionEvent;
@@ -47,19 +48,25 @@ public class LoginViewController implements Initializable {
         register();
     }
 
-    public void login(){
+    private void login(){
 
         buttonLogin.setOnAction(event -> {
 
             username = textFieldUsername.getText();
             password = passwordField.getText();
 
+            User u = new User();
+
+            u.setUsername(username);
+            u.setPassword(password);
+
             try{
-                Parent root = FXMLLoader.load(getClass().getResource("UserView.fxml"));
+                Parent root = FXMLLoader.load(getClass().getResource("/GUI/TokenView.fxml"));
                 Stage stage = new Stage();
                 Scene scene = new Scene(root);
                 stage.setScene(scene);
                 stage.setTitle("Database Manager");
+                stage.setUserData(u);
                 stage.show();
                 ((Node)(event.getSource())).getScene().getWindow().hide(); // closes login window after login
             }catch (Exception e){
@@ -68,7 +75,7 @@ public class LoginViewController implements Initializable {
         });
     }
 
-    public void register(){
+    private void register(){
         menuRegister.setOnAction(event -> {
             try{
                 Parent root = FXMLLoader.load(getClass().getResource("RegisterView.fxml"));
