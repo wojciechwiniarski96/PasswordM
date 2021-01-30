@@ -1,8 +1,4 @@
-import User.UserAction;
 import database.DataBaseManager;
-
-import java.sql.SQLException;
-import java.util.Scanner;
 
 public class Startup {
 
